@@ -6,7 +6,7 @@ import AppBar from 'material-ui/AppBar'
 class TopBar extends Component {
 	render() {
 		return(
-			<AppBar title="SkipTheDishes" />
+			<AppBar title="SkipTheDishes" onLeftIconButtonClick={this.props.handleClick}/>
 		)
 	}
 }

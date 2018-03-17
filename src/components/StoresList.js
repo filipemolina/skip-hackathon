@@ -19,7 +19,7 @@ class StoresList extends Component {
 						this_stores_cuisine = cuisines.find(cuisine => cuisine.id === item.cousineId)
 
 					return (
-						<Store store={item} cuisineName={this_stores_cuisine ? this_stores_cuisine.name : ""}/>
+						<Store key={item.id} store={item} cuisineName={this_stores_cuisine ? this_stores_cuisine.name : ""}/>
 					)
 				})}
 			</div>

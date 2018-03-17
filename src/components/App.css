@@ -1,15 +1,19 @@
 .App{
 	background-image: url(../utils/food.jpeg);
 	background-size: cover;
+	background-attachment: fixed;
 }
 
-.stores-list {
+.stores-list,
+.cuisines-list,
+.dishes-list {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: center;
 
-	padding: 10vh 5vw;
+	padding: 2vw 5vw;
+	min-height: calc(100vh - 64px)
 }
 
 .store-card {
@@ -21,12 +25,13 @@
 	justify-content: flex-end;
 }
 
-.register-page{
+.register-page {
 	min-height: calc(100vh - 64px);
 	display: flex;
 	justify-content: space-around;
 	align-items: flex-start;
 	padding-top: 10vh;
+	flex-wrap: wrap;
 }
 
 .register-form{

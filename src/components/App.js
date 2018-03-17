@@ -3,7 +3,9 @@ import './App.css';
 import TopBar from './TopBar'
 import HomePage from './HomePage'
 import LoginRegister from './LoginRegister'
+import Cart from './Cart'
 import { connect } from 'react-redux'
+import { NotificationStack } from 'react-notification'
 
 // React Router Dom imports
 import { Route, Redirect, withRouter } from 'react-router-dom'
@@ -11,11 +13,18 @@ import { Route, Redirect, withRouter } from 'react-router-dom'
 // Material UI imports
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import Drawer from 'material-ui/Drawer'
+import MenuItem from 'material-ui/MenuItem'
 
 ///// Action Creators
-import { fetchStores, fetchCuisines, fetchProducts } from '../actions'
+import { fetchStores, fetchCuisines, fetchProducts, addProductToCart } from '../actions'
 
 class App extends Component {
+
+  state = {
+    isMenuOpen: false,
+    notifications: []
+  }
 
 	// Customize the theme of the app
 	newTheme = getMuiTheme({
@@ -26,6 +35,27 @@ class App extends Component {
     }
   })
 
+  addNotification () {
+    const newCount = count + 1;
+    return this.setState({
+      notifications: this.state.notifications.add({
+        message: `Product Added to Cart`,
+        key: newCount,
+        action: 'Dismiss',
+        onClick: (notification, deactivate) => {
+          deactivate()
+          this.removeNotification('some UID')
+        },
+      })
+    })
+  }
+
+  removeNotification (count) {
+    this.setState({
+      notifications: this.state.notifications.filter(n => n.key !== count)
+    })
+  }
+
   componentDidMount = () => {
     // Get all the stores...
     this.props.getStores()
@@ -33,8 +63,19 @@ class App extends Component {
     this.props.getCuisines()
     // And finally the products
     this.props.getProducts()
+  }
 
-    localStorage.setItem('authToken', undefined)
+  handleClose = () => this.setState({ isMenuOpen: false })
+
+  goToCart = () => {
+    this.handleClose()
+    this.props.history.push("/cart")
+  }
+
+  logout = () => {
+    this.handleClose()
+    localStorage.removeItem('authToken')
+    this.props.history.push("/")
   }
 
   render() {
@@ -44,17 +85,26 @@ class App extends Component {
     return (
     	<MuiThemeProvider muiTheme={this.newTheme}>
 	      <div className="App">
-					<TopBar />
+          <Drawer docked={false} onRequestChange={(open) => this.setState({open})} open={this.state.isMenuOpen}>
+            <MenuItem onClick={this.goToCart}>Cart</MenuItem>
+            <MenuItem onClick={this.logout}>Logout</MenuItem>
+          </Drawer>
+					<TopBar handleClick={() => this.setState({ isMenuOpen: true })}/>
 
-          <Route exact path="/" render={(props) => {
-            if(localStorage.getItem('authToken'))
-              (<Redirect to={{ path: "/menu"}} />) 
-            else 
-              (<LoginRegister {...props} />)
-          }} />
+          <Route exact path="/" render={(props) => (
+            localStorage.getItem("authToken") ? (
+              <Redirect to="/menu" />
+            ) : (
+              <LoginRegister />
+            )
+          )} />
 
           <Route exact path="/menu" render={(props) => (
             <HomePage {...props} stores={stores} cuisines={cuisines} products={products} />
+          )} />
+
+          <Route exact path="/cart" render={(props) => (
+            <Cart products={this.props.cart} />
           )} />
           
 	      </div>
@@ -66,7 +116,8 @@ class App extends Component {
 const mapStateToProps = (state, props) => ({
   stores: state.stores,
   cuisines: state.cuisines,
-  products: state.products
+  products: state.products,
+  cart: state.cart,
 })
 
 const mapDispatchToProps = dispatch => ({

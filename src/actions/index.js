@@ -15,9 +15,9 @@ export const CUISINES_FETCHED = "CUISINES_FETCHED"
 export const FETCHING_PRODUCTS = "FETCHING_PRODUCTS"
 export const PRODUCTS_FETCHED = "PRODUCTS_FETCHED"
 
-/////////////////////////// CUSTOMER ACTIONS
+/////////////////////////// CART ACTIONS
 
-
+export const ADD_PRODUCT_TO_CART = "ADD_PRODUCT_TO_CART"
 
 /////////////////////////// ACTION CREATORS
 
@@ -76,5 +76,10 @@ export const fetchProducts = () => dispatch => {
 }
 
 
-///// CUSTOMERS
+///// CART
+
+export const addProductToCart = (product) => ({
+	type: ADD_PRODUCT_TO_CART,
+	product
+})
 
