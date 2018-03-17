@@ -1,0 +1,44 @@
+.App{
+	background-image: url(../utils/food.jpeg);
+	background-size: cover;
+}
+
+.stores-list {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+
+	padding: 10vh 5vw;
+}
+
+.store-card {
+	margin: 3vh 3vw;
+}
+
+.store-card-button {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.register-page{
+	min-height: calc(100vh - 64px);
+	display: flex;
+	justify-content: space-around;
+	align-items: flex-start;
+	padding-top: 10vh;
+}
+
+.register-form{
+	width: 40vw;
+}
+
+.login-form{
+	width: 35vw;
+}
+
+.register-form-button{
+	display: flex;
+	justify-content: center;
+}
+
